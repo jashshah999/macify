@@ -38,7 +38,8 @@ script works on Ubuntu 20.04 (GNOME 3.36), 22.04 (42), 24.04 (46) and newer. Any
 your shell is skipped with a warning instead of breaking the install. All settings use `gsettings` keys
 that are checked for existence first, so missing keys on older/newer GNOME are skipped, not errors.
 
-Verified: installed live on Ubuntu 20.04 / GNOME 3.36 (X11). For 22.04 and 24.04, every extension above has
+Verified: installed live on Ubuntu 20.04 / GNOME 3.36 (X11). `tools/toshy-keycheck.py` replays key combos through Toshy's config offline
+(Cmd+C in Firefox -> Ctrl+C, Cmd+C in a terminal -> Ctrl+Shift+C, Ctrl+C stays the interrupt, Cmd+Backspace in Files -> trash, Cmd+Space -> Ulauncher, Ctrl+Up -> Mission Control). For 22.04 and 24.04, every extension above has
 an extensions.gnome.org build for GNOME 42, 44, 46 and 48, every apt dependency exists on focal, jammy and
 noble, and the GNOME 42 and 46 code paths were exercised with `--dry-run` against a stubbed shell version.
 
