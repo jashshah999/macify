@@ -30,6 +30,7 @@ git clone https://github.com/jashshah999/macify.git ~/macify && cd ~/macify
 | Terminal | "macOS" gnome-terminal profile: Terminal.app palette, 80×24, header bar, no menu bar | dconf |
 | Desktop | no Home/Trash icons on the desktop (Trash lives in the dock) | gsettings |
 | Quick Look | select a file in Files and press Space to preview it | gnome-sushi |
+| Input | natural scrolling on touchpad and mouse, tap to click, two-finger secondary click, Mac key-repeat timing, screenshots saved to the Desktop | gsettings |
 | Boot splash | black screen, white logo, thin progress bar (like a Mac boot) | Plymouth two-step theme, initramfs rebuilt for the running kernel |
 | Snap apps | WhiteSur GTK theme and icons inside Slack, VLC, Snap Store | theme copied into each snap's private home (`~/snap/<app>/current/.themes`), `icon-theme-whitesur` snap connected to each snap's icon-themes plug |
 

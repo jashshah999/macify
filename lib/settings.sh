@@ -87,6 +87,18 @@ apply_look() {
   gset org.gnome.desktop.peripherals.touchpad tap-to-click true
   gset org.gnome.desktop.peripherals.touchpad natural-scroll true
   gset org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+
+  # Input defaults as on a Mac: natural scrolling (touchpad and mouse), tap to click, two-finger secondary click,
+  # macOS key-repeat timing (375 ms delay, ~11 repeats/s), screenshots land on the Desktop
+  gset org.gnome.desktop.peripherals.touchpad natural-scroll true
+  gset org.gnome.desktop.peripherals.touchpad tap-to-click true
+  gset org.gnome.desktop.peripherals.touchpad two-finger-scrolling-enabled true
+  gset org.gnome.desktop.peripherals.mouse natural-scroll true
+  gset org.gnome.desktop.peripherals.keyboard delay 375
+  gset org.gnome.desktop.peripherals.keyboard repeat-interval 90
+  mkdir -p "$HOME/Desktop"
+  gset org.gnome.gnome-screenshot auto-save-directory "'file://$HOME/Desktop'"
+  gset org.gnome.gnome-screenshot last-save-directory "'file://$HOME/Desktop'"
 }
 
 apply_keys() {
