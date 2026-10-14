@@ -1,0 +1,57 @@
+[Plymouth Theme]
+Name=macify
+Description=macOS-style boot splash: black background, logo, thin progress bar (made by macify)
+ModuleName=two-step
+
+[two-step]
+Font=Ubuntu 12
+TitleFont=Ubuntu Light 30
+ImageDir=/usr/share/plymouth/themes/macify
+DialogHorizontalAlignment=.5
+DialogVerticalAlignment=.7
+TitleHorizontalAlignment=.5
+TitleVerticalAlignment=.382
+HorizontalAlignment=.5
+VerticalAlignment=.62
+WatermarkHorizontalAlignment=.5
+WatermarkVerticalAlignment=.42
+Transition=none
+TransitionDuration=0.0
+BackgroundStartColor=0x000000
+BackgroundEndColor=0x000000
+ProgressBarBackgroundColor=0x3a3a3a
+ProgressBarForegroundColor=0xffffff
+MessageBelowAnimation=true
+
+[boot-up]
+UseEndAnimation=false
+UseProgressBar=true
+
+[shutdown]
+UseEndAnimation=false
+UseProgressBar=true
+
+[reboot]
+UseEndAnimation=false
+UseProgressBar=true
+
+[updates]
+SuppressMessages=true
+ProgressBarShowPercentComplete=true
+UseProgressBar=true
+_Title=Installing Updates...
+_SubTitle=Do not turn off your computer
+
+[system-upgrade]
+SuppressMessages=true
+ProgressBarShowPercentComplete=true
+UseProgressBar=true
+_Title=Upgrading System...
+_SubTitle=Do not turn off your computer
+
+[firmware-upgrade]
+SuppressMessages=true
+ProgressBarShowPercentComplete=true
+UseProgressBar=true
+_Title=Upgrading Firmware...
+_SubTitle=Do not turn off your computer
