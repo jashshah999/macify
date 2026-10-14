@@ -93,7 +93,11 @@ apply_keys() {
   # Cmd+Space -> search (GNOME overview search), freeing Super+Space from input-source switching
   gset org.gnome.desktop.wm.keybindings switch-input-source "['XF86Keyboard']"
   gset org.gnome.desktop.wm.keybindings switch-input-source-backward "['<Shift>XF86Keyboard']"
-  gset org.gnome.shell.keybindings toggle-overview "['<Super>space']"
+  if have ulauncher || [ "${DO_LAUNCHER:-0}" = 1 ]; then   # Ulauncher owns Super+Space; GNOME search moves to Super+S
+    gset org.gnome.shell.keybindings toggle-overview "['<Super>s']"
+  else
+    gset org.gnome.shell.keybindings toggle-overview "['<Super>space']"
+  fi
   # Cmd+Q closes the window (Alt+F4 still works); Cmd+H hides (GNOME default: Super+H minimizes)
   gset org.gnome.desktop.wm.keybindings close "['<Alt>F4', '<Super>q']"
   gset org.gnome.desktop.wm.keybindings minimize "['<Super>h']"

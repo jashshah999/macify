@@ -47,7 +47,7 @@ noble, and the GNOME 42 and 46 code paths were exercised with `--dry-run` agains
 |---|---|---|
 | `--launcher` | Ulauncher as Spotlight on Super+Space (GNOME search moves to Super+S) | GitHub release `.deb`, no PPA |
 | `--gestures` | Touchégg + X11 Gestures: 3-finger swipe = Spaces/Mission Control, pinch = Launchpad | GitHub release `.deb` (older release or source build on 20.04), no PPA |
-| `--mac-keys` | Cmd+C/V/X/Z/A/W/T/Q… in every app, terminals keep Ctrl+C. Installs Toshy through the same flags its own bootstrap uses; active after one log out/in | Toshy (GitHub), runs as your user, tray icon to pause |
+| `--mac-keys` | Cmd+C/V/X/Z/A/W/T/Q… in every app, terminals keep Ctrl+C. Installs Toshy through the same flags its own bootstrap uses. Toshy's keymapper needs Python 3.10+, so on 20.04 (Python 3.8) its environment is rebuilt on python3.10-3.12 if present, else on a standalone CPython 3.11 build fetched from GitHub into `~/.cache/macify` (no PPA, nothing system-wide) | Toshy (RedBearAK), xwaykeyz |
 
 ## Revert
 
