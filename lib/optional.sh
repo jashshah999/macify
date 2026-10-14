@@ -37,8 +37,41 @@ X-GNOME-Autostart-enabled=true
 DESK
   # Cmd+Space belongs to the launcher now; GNOME search moves to Super+S
   gset org.gnome.shell.keybindings toggle-overview "['<Super>s']"
-  pgrep -x ulauncher >/dev/null || (setsid ulauncher --hide-window >/dev/null 2>&1 &)
-  ok "Ulauncher installed: press Super+Space (set the hotkey in its preferences if it did not take)"
+  install_ulauncher_files_ext
+  pkill -u "$USER" -x ulauncher >/dev/null 2>&1; sleep 1   # restart so the hotkey, theme and extension are picked up
+  (setsid ulauncher --hide-window >/dev/null 2>&1 </dev/null &)
+  ok "Ulauncher installed: Super+Space to launch apps, 'f <name>' finds files (set the hotkey in its preferences if it did not take)"
+}
+
+install_ulauncher_files_ext() {   # 'f <name>' in Ulauncher searches the same file index as the Files app and the overview (Spotlight-style)
+  local id=com.github.jashshah999.macify-files dir="$HOME/.local/share/ulauncher/extensions" db="$HOME/.config/ulauncher/extensions.json"
+  mkdir -p "$dir" "$HOME/.config/ulauncher"
+  rm -rf "$dir/$id"; cp -r "$MACIFY_DIR/assets/ulauncher/macify-files" "$dir/$id"
+  python3 -I - "$db" "$id" <<'PY2'
+import json, sys, datetime
+db, ext_id = sys.argv[1], sys.argv[2]
+try:
+    d = json.load(open(db))
+except (OSError, ValueError):
+    d = {}
+now = datetime.datetime.now().isoformat()
+d[ext_id] = {"id": ext_id, "url": "https://github.com/jashshah999/macify", "updated_at": now, "last_commit": "macify", "last_commit_time": now}
+json.dump(d, open(db, "w"), indent=4)
+PY2
+}
+
+remove_ulauncher_files_ext() {
+  local id=com.github.jashshah999.macify-files db="$HOME/.config/ulauncher/extensions.json"
+  rm -rf "$HOME/.local/share/ulauncher/extensions/$id"
+  [ -f "$db" ] && python3 -I - "$db" "$id" <<'PY2'
+import json, sys
+db, ext_id = sys.argv[1], sys.argv[2]
+try:
+    d = json.load(open(db))
+except (OSError, ValueError):
+    sys.exit(0)
+d.pop(ext_id, None); json.dump(d, open(db, "w"), indent=4)
+PY2
 }
 
 install_gestures() {   # Touchégg daemon + X11 Gestures extension = 3/4-finger macOS gestures on X11
@@ -67,7 +100,18 @@ install_gestures() {   # Touchégg daemon + X11 Gestures extension = 3/4-finger 
   if [ "$SESSION_TYPE" = x11 ]; then
     . "$MACIFY_DIR/lib/extensions.sh"
     ext_install x11gestures@joseexposito.github.io && ext_enable x11gestures@joseexposito.github.io
-    ok "gestures: 3-finger swipe up = Mission Control, 3-finger left/right = switch Spaces, pinch = Launchpad"
+    if [ "${GS_MAJOR:-0}" -lt 40 ]; then   # GNOME 3.x has no native 3-finger gestures: the Touchégg client maps them like macOS
+      mkdir -p "$HOME/.config/touchegg"
+      if [ -f "$HOME/.config/touchegg/touchegg.conf" ] && [ ! -f "$HOME/.config/touchegg/touchegg.conf.macify-orig" ]; then
+        cp "$HOME/.config/touchegg/touchegg.conf" "$HOME/.config/touchegg/touchegg.conf.macify-orig"
+      fi
+      install -m 644 "$MACIFY_DIR/assets/touchegg/touchegg.conf" "$HOME/.config/touchegg/touchegg.conf"
+      # the client autostarts at login (/etc/xdg/autostart/touchegg.desktop) and reloads the file on change; start it now the first time
+      pgrep -u "$USER" -x touchegg >/dev/null || (setsid touchegg >/dev/null 2>&1 </dev/null &)
+      ok "gestures: 3 fingers up = Mission Control, down = show desktop, left/right = Spaces; 4-finger pinch = Launchpad, spread = desktop; 2-finger pinch zooms in browsers"
+    else
+      ok "gestures: 3 fingers up = Mission Control (up again = Launchpad), left/right = Spaces (GNOME's own gestures, enabled on X11 by the extension)"
+    fi
   else
     ok "GNOME on Wayland already has native 3-finger gestures; Touchégg installed for X11 sessions"
   fi
@@ -206,5 +250,33 @@ TXT
       return 1
     fi
   fi
-  toshy_python_floor
+  toshy_python_floor && toshy_user_keys
+}
+
+toshy_user_keys() {   # Cmd+Space -> Ulauncher, Ctrl+Up -> Mission Control, Ctrl+Left/Right -> Spaces (in Toshy's user slice, which its upgrades keep)
+  local cfg="$TOSHY_DIR/toshy_config.py"
+  [ -f "$cfg" ] || return 0
+  grep -q 'keymap("macify keys"' "$cfg" && return 0
+  python3 -I - "$cfg" <<'PY2' || { warn "could not add the macify keys to Toshy's config"; return 1; }
+import sys
+p = sys.argv[1]; s = open(p).read()
+anchor = '###  SLICE_MARK_END: user_apps'
+if s.count(anchor) != 1:
+    sys.exit(1)
+block = '''keymap("macify keys", {
+    C("RC-Space"):              C("Super-Space"),               # Cmd+Space opens Ulauncher
+    C("Super-Up"):              C("Super-s"),                   # Ctrl+Up = Mission Control (GNOME overview)
+    C("Super-Left"):            C("Super-Page_Up"),             # Ctrl+Left = previous Space
+    C("Super-Right"):           C("Super-Page_Down"),           # Ctrl+Right = next Space
+}, when = lambda ctx:
+    cnfg.screen_has_focus and
+    not ctx_app_is_remote and
+    not hmp_is_jetbrains(ctx)       # JetBrains IDEs use Ctrl+arrows for editor tabs, as on macOS
+)
+
+'''
+open(p, 'w').write(s.replace(anchor, block + anchor))
+PY2
+  systemctl --user try-restart toshy-config.service >/dev/null 2>&1 || true
+  ok "Toshy: Cmd+Space = Ulauncher, Ctrl+Up = Mission Control, Ctrl+Left/Right = Spaces"
 }

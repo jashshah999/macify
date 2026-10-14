@@ -35,6 +35,8 @@ revert_all() {
   remove_themes
   rm -rf "$HOME/.config/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/assets" "$HOME/.config/gtk-4.0/windows-assets" 2>/dev/null
   rm -f "$HOME/.config/autostart/ulauncher.desktop"
+  remove_ulauncher_files_ext
+  [ -f "$HOME/.config/touchegg/touchegg.conf.macify-orig" ] && mv -f "$HOME/.config/touchegg/touchegg.conf.macify-orig" "$HOME/.config/touchegg/touchegg.conf"
   remove_boot_splash
   remove_snap_icons
   [ -d "$HOME/.config/toshy" ] && log "Toshy is installed; remove it with: cd $MACIFY_CACHE/src/toshy && ./setup_toshy.py uninstall"

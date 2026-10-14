@@ -5,7 +5,8 @@
 install_deps() {
   have apt-get || die "macify targets Ubuntu (apt-based) systems"
   local want=(git curl unzip python3 dconf-cli sassc gtk2-engines-murrine gnome-themes-extra libglib2.0-dev-bin libxml2-utils
-              imagemagick gnome-tweaks gnome-shell-extensions gnome-shell-extension-prefs fonts-inter fonts-dejavu-core dialog)
+              imagemagick gnome-tweaks gnome-shell-extensions gnome-shell-extension-prefs fonts-inter fonts-dejavu-core dialog
+              gnome-sushi tracker tracker-miner-fs)
   local avail=() p
   for p in "${want[@]}"; do
     if apt-cache policy "$p" 2>/dev/null | grep -q "Candidate: [^(]"; then avail+=("$p"); else log "package $p not available on this release, skipping"; fi

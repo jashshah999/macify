@@ -29,6 +29,7 @@ git clone https://github.com/jashshah999/macify.git ~/macify && cd ~/macify
 | Firefox | Safari-like Monterey theme (userChrome) | `tweaks.sh -f monterey` |
 | Terminal | "macOS" gnome-terminal profile: Terminal.app palette, 80×24, header bar, no menu bar | dconf |
 | Desktop | no Home/Trash icons on the desktop (Trash lives in the dock) | gsettings |
+| Quick Look | select a file in Files and press Space to preview it | gnome-sushi |
 | Boot splash | black screen, white logo, thin progress bar (like a Mac boot) | Plymouth two-step theme, initramfs rebuilt for the running kernel |
 | Snap apps | WhiteSur GTK theme and icons inside Slack, VLC, Snap Store | theme copied into each snap's private home (`~/snap/<app>/current/.themes`), `icon-theme-whitesur` snap connected to each snap's icon-themes plug |
 
@@ -45,9 +46,9 @@ noble, and the GNOME 42 and 46 code paths were exercised with `--dry-run` agains
 
 | Flag | What | Source |
 |---|---|---|
-| `--launcher` | Ulauncher as Spotlight on Super+Space (GNOME search moves to Super+S) | GitHub release `.deb`, no PPA |
-| `--gestures` | Touchégg + X11 Gestures: 3-finger swipe = Spaces/Mission Control, pinch = Launchpad | GitHub release `.deb` (older release or source build on 20.04), no PPA |
-| `--mac-keys` | Cmd+C/V/X/Z/A/W/T/Q… in every app, terminals keep Ctrl+C. Installs Toshy through the same flags its own bootstrap uses. Toshy's keymapper needs Python 3.10+, so on 20.04 (Python 3.8) its environment is rebuilt on python3.10-3.12 if present, else on a standalone CPython 3.11 build fetched from GitHub into `~/.cache/macify` (no PPA, nothing system-wide) | Toshy (RedBearAK), xwaykeyz |
+| `--launcher` | Ulauncher as Spotlight on Super+Space (GNOME search moves to Super+S), with `f <name>` searching the same file index as Files and the overview | GitHub release `.deb`, no PPA; a small bundled Ulauncher extension |
+| `--gestures` | Touchégg + X11 Gestures. GNOME 3.x: 3 fingers up = Mission Control, down = show desktop, left/right = Spaces, 4-finger pinch = Launchpad, spread = desktop, 2-finger pinch zooms in browsers. GNOME 40+: the shell's own 3-finger gestures (up = Mission Control, up again = Launchpad, left/right = Spaces) | GitHub release `.deb` (older release or source build on 20.04), no PPA |
+| `--mac-keys` | Cmd+C/V/X/Z/A/W/T/Q… in every app, terminals keep Ctrl+C. Installs Toshy through the same flags its own bootstrap uses, then adds Cmd+Space = Ulauncher, Ctrl+Up = Mission Control, Ctrl+Left/Right = Spaces to its user keymap. Toshy's keymapper needs Python 3.10+, so on 20.04 (Python 3.8) its environment is rebuilt on python3.10-3.12 if present, else on a standalone CPython 3.11 build fetched from GitHub into `~/.cache/macify` (no PPA, nothing system-wide) | Toshy (RedBearAK), xwaykeyz |
 
 ## Revert
 

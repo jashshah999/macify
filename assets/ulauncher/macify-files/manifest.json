@@ -1,0 +1,12 @@
+{
+  "required_api_version": "^2.0.0",
+  "name": "Files (macify)",
+  "description": "Spotlight-style file search through GNOME's file index (tracker)",
+  "developer_name": "macify",
+  "icon": "images/icon.png",
+  "options": { "query_debounce": 0.15 },
+  "preferences": [
+    { "id": "kw", "type": "keyword", "name": "Search files", "description": "Type this, a space, then part of a file name", "default_value": "f" },
+    { "id": "limit", "type": "input", "name": "Maximum results", "default_value": "12" }
+  ]
+}
